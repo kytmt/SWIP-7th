@@ -1,6 +1,4 @@
-#include <stdio.h>
-#include <wiringPi.h>
-#include <rpi_1_led.h>
+#include "rpi_1_led.h"
 
 void blinkLED(int mode) 
 {
