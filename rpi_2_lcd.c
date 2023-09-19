@@ -1,7 +1,7 @@
 #include <wiringPiI2C.h>
 #include <wiringPi.h>
 #include <stdlib.h>
-#include <stdio.h>
+#include <stdio.h> 
 
 #define Detected_DEVICE_ID_BY_I2C       0x27        // Device ID detected by I2C 
                                                     // Seems that it maps to the device's address
