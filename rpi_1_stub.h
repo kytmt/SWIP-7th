@@ -6,8 +6,8 @@
 #include <sys/socket.h>
 #include <linux/can.h>
 #include <linux/can/raw.h>
-
 #include "rpi_1_can.h"
+
 typedef struct Data
 {
         int i_data;

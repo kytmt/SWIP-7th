@@ -1,20 +1,29 @@
-#inclue <pthread.h>
+#include <stdio.h>
+#include <wiringPi.h>
+#include <pthread.h>
+#include "rpi_1_stub.h"
+#include "rpi_1_can.h"
+#include "rpi_1_led.h"
 
-const int socketCANDescriptor;
+
+int socketCANDescriptor;
 
 
 int main()
 {
         
+        printf("start\n");
+
         struct sockaddr_can addr;
         struct ifreq ifr;
        
 
 
         if ((socketCANDescriptor = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
-                perror("Socket creation failed.");
+                printf("Socket creation failed.");
                 return -1;
         }
+
 
         strcpy(ifr.ifr_name, "can0" );
         ioctl(socketCANDescriptor, SIOCGIFINDEX, &ifr);
@@ -28,10 +37,26 @@ int main()
                 return -1;
         } 
 
+        delay(1000);
         while(1)
         {
-            //quit 인거 terminateRPC호출;
+                
+                printf("working\n");
+
+                moveMotor(180);
+                delay(2000);
+
+                displayText(1, "Hello world!");
+                delay(2000);
+
+
+                terminateRPC("quit");
+                delay(2000);
+
+
+                //quit 인거 terminateRPC호출;
             
+                delay(2000);
         }
 
         
