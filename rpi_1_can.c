@@ -5,6 +5,8 @@
 
 #include "rpi_1_can.h"
 
+#define PACKET_SIZE 36
+
 int can1_send(const char* cmd,  DATA args)
 {
 
@@ -26,8 +28,8 @@ int can1_send(const char* cmd,  DATA args)
         strcpy(sdata.func, cmd);
 
         //기본값 설정
-        packetTotal = sizeof(data) / 8 + 1;
-        lastPacketSize = sizeof(data) % 8;
+        packetTotal = PACKET_SIZE / 8 + 1;
+        lastPacketSize = PACKET_SIZE % 8;
 
 
         //로직

@@ -6,6 +6,7 @@ int can1_send(const char* cmd, DATA args);
 int can1_recv();
 
 extern struct sendData;
+extern struct initData;
 extern struct recvData;
 extern struct Data;
 #endif

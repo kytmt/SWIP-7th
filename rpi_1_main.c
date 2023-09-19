@@ -1,5 +1,4 @@
-
-
+#inclue <pthread.h>
 
 const int socketCANDescriptor;
 
@@ -31,7 +30,8 @@ int main()
 
         while(1)
         {
-
+            //quit 인거 terminateRPC호출;
+            
         }
 
         

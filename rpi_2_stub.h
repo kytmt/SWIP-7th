@@ -7,7 +7,13 @@
 #include <linux/can.h>
 #include <linux/can/raw.h>
 
-#include "rpi_1_can.h"
+#include "rpi_2_can.h"
+
+#define BUF_SIZE 256
+char buf[BUF_SIZE];
+
+
+
 typedef struct Data
 {
         int i_data;
@@ -23,6 +29,4 @@ struct sendData{
 struct recvData{
         int ret;
 };
-
-
 #endif
