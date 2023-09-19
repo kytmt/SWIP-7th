@@ -75,9 +75,16 @@ void initializeLCD()
 }
 
 // Display text string 
-void displayText(const char *stringPointer)
+void displayText(int line, const char *stringPointer)
 {
   char characterToSend;
+
+  if (line == 1)
+    sendBitsToLCD(0x80, LCD_RS_INST | LCD_RW_WRITE);   // 1st position in 1st line: "1000 0000" | "0000 0000"
+  else if (line == 2)
+    sendBitsToLCD(0xC0, LCD_RS_INST | LCD_RW_WRITE);   // 1st position in 2nd line: "1100 0000" | "0000 0000"
+  else
+    return;
 
   while (*stringPointer) {
     characterToSend = *stringPointer;
@@ -93,12 +100,12 @@ void displayText(const char *stringPointer)
 }
 
 // Change the text line
-void changeLine(int line)
-{
-  if (line == 1)
-    sendBitsToLCD(0x80, LCD_RS_INST | LCD_RW_WRITE);   // 1st position in 1st line: "1000 0000" | "0000 0000"
-  else if (line == 2)
-    sendBitsToLCD(0xC0, LCD_RS_INST | LCD_RW_WRITE);   // 1st position in 2nd line: "1100 0000" | "0000 0000"
-  else
-    return;
-}
+// void changeLine(int line)
+// {
+//   if (line == 1)
+//     sendBitsToLCD(0x80, LCD_RS_INST | LCD_RW_WRITE);   // 1st position in 1st line: "1000 0000" | "0000 0000"
+//   else if (line == 2)
+//     sendBitsToLCD(0xC0, LCD_RS_INST | LCD_RW_WRITE);   // 1st position in 2nd line: "1100 0000" | "0000 0000"
+//   else
+//     return;
+// }
