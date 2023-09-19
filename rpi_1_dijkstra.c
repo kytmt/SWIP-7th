@@ -1,4 +1,9 @@
 #include "rpi_1_dijkstra.h"
+#include <stdio.h>
+
+int V; // 그래프의 정점 수
+int len;
+int graph[8][8];
 
 int readTxtFile(void)
 {
@@ -79,18 +84,3 @@ void findShortestPath(int src, int dest, char buffer[], int *len) {
     printPath(parent, dest, buffer, len);
     printf("\n");
 }
-
-/*
-int main() {
-    char temp[1024]; // 문자열 저장 배열
-    int src = 3; // 시작 노드
-    int dest = 6; // 도착 노드
-    int len; // 문자열 길이
-
-    findShortestPath(src, dest, temp, &len); // 시작 노드와 도착 노드를 지정하여 최단 경로 계산
-
-    printf("len : %d\n",len);
-
-    return 0;
-}
-*/

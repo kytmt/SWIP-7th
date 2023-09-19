@@ -1,27 +1,32 @@
 #include "rpi_1_led.h"
+#include <wiringPi.h>
+#include <stdio.h>
 
-void blinkLED(int mode) 
+void* blinkLED(void *mode) 
 {
-    wiringPiSetupGpio();
-
+    
+    int md = *(int*)mode;
+ 
     pinMode(GPIO_LED, OUTPUT);
 
-
-    if (mode == BLINK_1s)
+    while (1)
     {
-        digitalWrite(GPIO_LED, HIGH);
-        delay(1000);
+        md = *(int*)mode;
         
-        digitalWrite(GPIO_LED, LOW);
-        delay(1000);
-    }
+        if( md == BLINK_10Hz)
+        {
+            digitalWrite(GPIO_LED, HIGH);
+            delay(100);
+            
+            digitalWrite(GPIO_LED, LOW);
+            delay(100);
+        } else {
+            digitalWrite(GPIO_LED, HIGH);
+            delay(1000);
+            
+            digitalWrite(GPIO_LED, LOW);
+            delay(1000);
+        }
 
-    else if (mode = BLINK_10Hz)
-    {
-        digitalWrite(GPIO_LED, HIGH);
-        delay(100);
-        
-        digitalWrite(GPIO_LED, LOW);
-        delay(100);
     }
 }
