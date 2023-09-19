@@ -3,62 +3,69 @@
 #include <string.h>
 #include <unistd.h>
 
-#include <net/if.h>
+#include "rpi_1_can.h"
 
-#include <sys/ioctl.h>
-#include <sys/socket.h>
-
-#include <linux/can.h>
-#include <linux/can/raw.h>
-
-int main(void) 
+int can1_send(const char* cmd,  DATA args)
 {
-        int socketCANDescriptor;
-        struct sockaddr_can addr;
-        struct ifreq ifr;
+
+        // 1
         struct can_frame frame;
+        struct sendData sdata;
 
-        int sendData[2] = {20, 48};
-        int numBytes;
-        int i;
-        
-        
-        printf("SocketCAN Sender\n");
+        int index = 0;
+        int packetTotal;
+        int lastPacketSize;
 
-        if ((socketCANDescriptor = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
-                perror("Socket creation failed.");
-                return -1;
-        }
-
-        strcpy(ifr.ifr_name, "can0" );
-        ioctl(socketCANDescriptor, SIOCGIFINDEX, &ifr);
-        memset(&addr, 0, sizeof(addr));
-        
-        addr.can_family = AF_CAN;        
-        addr.can_ifindex = ifr.ifr_ifindex;
-
-        if (bind(socketCANDescriptor, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
-                perror("Bind failed");
-                return -1;
-        }
-
+        //frame 설정
         frame.can_id = 0x555;
-        memcpy(frame.data, (char *)sendData, 8);
         frame.can_dlc = 8;
-        
-        printf("0x%03X [%d] ",frame.can_id, frame.can_dlc);
 
-        if (write(socketCANDescriptor, &frame, sizeof(struct can_frame)) != sizeof(struct can_frame)) {
-                perror("Write failed");
-                return -1;
-        }          
+        //데이터 입력
+        sdata.data = args;
+        sdata.func_len = strlen(cmd);
+        strcpy(sdata.func, cmd);
 
-        printf("%d %d\n", sendData[0], sendData[1]);
+        //기본값 설정
+        packetTotal = sizeof(data) / 8 + 1;
+        lastPacketSize = sizeof(data) % 8;
 
-        if (close(socketCANDescriptor) < 0) {
-                perror("Close failed");
+
+        //로직
+        while(packetTotal != 0)
+        {
+                if(packetTotal == 1)
+                        frame.can_dlc = lastPacketSize;
+
+                // frame 내용 수정
+                memcpy(frame.data, (char *) (sendData + index * 8),  frame.can_dlc);
+
+                if (write(socketCANDescriptor, &frame, sizeof(struct can_frame)) != sizeof(struct can_frame)) {
+                        perror("Write failed");
+                        return -1;
+                }
+
+                index++;
+                packetTotal--;
+        }
+
+        return sizeof(sdata);
+}
+
+int can1_recv()
+{
+        struct can_frame frame;
+        struct recvData data;
+
+        // rpi#2가 리턴해주는 값을 받는 것.
+        int nbytesReceived;
+
+        nbytesReceived = read(socketCANDescriptor, &frame, sizeof(struct can_frame));
+        if (nbytesReceived < 0) {
+                perror("Read failed");
                 return -1;
         }
 
-        return 0;
+        memcpy(data, (unsigned char *)(frame.data), frame.can_dlc);
+
+        return data.ret;
 }

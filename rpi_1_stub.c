@@ -1,0 +1,73 @@
+#include "rpi_1_stub.h"
+
+int moveMotor(const int inputValue)
+{
+    int ret;
+    struct Data data;
+
+    data.i_len = 4;
+    data.i_data = inputValue;
+    data.str_len = 0;
+    data.str_data = NULL;
+
+    if(can1_send("moveMotor", data) < 0) {
+        perror("can1_send error");
+        return -1;
+    }
+
+    ret = can1_recv();
+    if(ret < 0) {
+        perror("can1_recv error");
+        return -1;
+    }
+
+    return ret;
+}
+
+int displayText(const int lineNum, const char *text)
+{
+    int ret;
+    struct Data data;
+
+    data.i_len = 4;
+    data.i_data = lineNum;
+    data.str_len = strlen(text);
+    strcpy(data.str_data, text);
+
+    if(can1_send("displayText", data) < 0) {
+        perror("can1_send error");
+        return -1;
+    }
+
+    ret = can1_recv();
+    if(ret < 0) {
+        perror("can1_recv error");
+        return -1;
+    }
+
+    return ret;
+}
+
+int terminateRPC(const char* text)
+{
+    int ret;
+    struct Data data;
+
+    data.i_len = 0;
+    data.i_data = 0;
+    data.str_len = strlen(text);
+    strcpy(data.str_data, text);
+
+    if(can1_send("terminateRPC", data) < 0) {
+        perror("can1_send error");
+        return -1;
+    }
+
+    ret = can1_recv();
+    if(ret < 0) {
+        perror("can1_recv error");
+        return -1;
+    }
+
+    return ret;
+}
