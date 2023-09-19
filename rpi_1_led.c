@@ -21,10 +21,10 @@ void blinkLED(int mode)
         else if (mode = BLINK_10Hz)
         {
             digitalWrite(GPIO_LED, HIGH);
-            delay(1000);
+            delay(100);
             
             digitalWrite(GPIO_LED, LOW);
-            delay(1000);
+            delay(100);
         }
     }
 }
