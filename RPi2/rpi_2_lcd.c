@@ -5,6 +5,8 @@
 
 #include "rpi_2_lcd.h"
 
+int deviceHandle;
+
 void toggleLCDEnable(int eightBits)
 {
   // Toggle enable pin on LCD display
@@ -75,16 +77,17 @@ void initializeLCD()
 }
 
 // Display text string 
-void displayText(int line, const char *stringPointer)
+int displayText(int line, const char *stringPointer)
 {
   char characterToSend;
+  int i = 0;
 
   if (line == 1)
     sendBitsToLCD(0x80, LCD_RS_INST | LCD_RW_WRITE);   // 1st position in 1st line: "1000 0000" | "0000 0000"
   else if (line == 2)
     sendBitsToLCD(0xC0, LCD_RS_INST | LCD_RW_WRITE);   // 1st position in 2nd line: "1100 0000" | "0000 0000"
   else
-    return;
+    return -1;
 
   while (*stringPointer) {
     characterToSend = *stringPointer;
@@ -95,8 +98,12 @@ void displayText(int line, const char *stringPointer)
       sendBitsToLCD(*(stringPointer++), LCD_RS_DATA | LCD_RW_WRITE);
     }
     else
-      return;
+      return -1;
   }
+  while(stringPointer[i] != '\0'){
+    i++
+  }
+  return i;
 }
 
 // Change the text line

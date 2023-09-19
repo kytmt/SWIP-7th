@@ -1,8 +1,10 @@
+extern int deviceHandle;
+
 void toggleLCDEnable(int eightBits);
 void sendBitsToLCD(int eightBits, int mode);
 void initializeLCD();
-void displayText(const char *stringPointer);
-void changeLine(int line);
+void displayText(int line, const char *stringPointer);
+void changeLine(int line);                                   
 
 #define Detected_DEVICE_ID_BY_I2C       0x27        // Device ID detected by I2C 
                                                     // Seems that it maps to the device's address
@@ -16,4 +18,3 @@ void changeLine(int line);
 #define LCD_RS_INST                     0x00        // Instruction    "0000 0000"
 
 
-extern int deviceHandle;                                   // Seems that it maps to the register address of the device
