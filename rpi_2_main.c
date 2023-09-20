@@ -9,6 +9,7 @@ int main()
         DATA args;
         struct sockaddr_can addr;
         struct ifreq ifr;
+        int rpiRet;
 
         if ((socketCANDescriptor = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
                 perror("Socket creation failed.");
@@ -36,15 +37,17 @@ int main()
 
 
         if(!strcmp(func, "moveMotor")) {
-                moveMotor(args.i_data);
+                rpiRet = moveMotor(args.i_data);
         } else if(!strcmp(func, "displayText")) {
-                displayText(args.i_data, args.str_data);
+                rpiRet = displayText(args.i_data, args.str_data);
         } else if(!strcmp(func, "terminateRPC")) {
-                terminateRPC(args.str_data);
+                rpiRet = terminateRPC(args.str_data);
         } else{
                 printf("Unmarshall error\n");
                 continue;
         }
+
+        
 
 
 

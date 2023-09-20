@@ -1,6 +1,7 @@
 #include "rpi_1_stub.h"
 #include <stddef.h>
 #include <string.h>
+#include <stdio.h>
 
 int moveMotor(const int inputValue)
 {
@@ -10,7 +11,7 @@ int moveMotor(const int inputValue)
 
     data.i_data = inputValue;
 
-    strcpy(data.str_data,NULL);
+    bzero(data.str_data, 16);
 
     if(can1_send("moveMotor", data) < 0) {
         perror("can1_send error");
